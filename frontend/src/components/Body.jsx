@@ -6,7 +6,7 @@ import DeleteForm from './deleteForm';
 export default function Body() {
     const apiUrl = 'http://127.0.0.1:8000/api/todos/';
     const [todos, setTodos] = useState([]);
-    const [isForm, setIsForm] = useState(false);
+    const [isForm, setIsForm] = useState(null);
     const [deleteId, setDeleteId] = useState(null);
 
     // Fetch data from API
@@ -41,17 +41,17 @@ export default function Body() {
         <div>
             <div className='p-4 flex justify-between items-center'>
                 <p className='text-3xl font-bold'>Todo</p>
-                <i className='fa-solid fa-circle-plus text-blue-500 text-3xl mr-2 cursor-pointer' onClick={() => { setIsForm(true) }}></i>
+                <i className='fa-solid fa-circle-plus text-blue-500 text-3xl mr-2 cursor-pointer' onClick={() => { setIsForm(0) }}></i>
             </div>
 
             <div className="my-4 flex justify-center flex-wrap gap-5">
                 {todos.length !== 0 ? (
-                    todos.map((todo) => <Card key={todo.id} todo={todo} setDeleteId={setDeleteId} />)
+                    todos.map((todo) => <Card key={todo.id} todo={todo} setDeleteId={setDeleteId} setIsForm={setIsForm} />)
                 ) : (
                     <p>No tasks available</p>
                 )}
             </div>
-            {isForm && <CreateForm setIsForm={setIsForm} setTodos={setTodos} />}
+            {isForm != null && <CreateForm isForm={isForm} todos={todos} setIsForm={setIsForm} setTodos={setTodos} />}
             {deleteId && <DeleteForm setDeleteId={setDeleteId} setTodos={setTodos} deleteTodo={deleteTodo} />}
         </div>
     );
