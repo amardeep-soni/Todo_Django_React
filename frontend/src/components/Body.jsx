@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Card from './Card';
 import CreateForm from './CreateForm';
+import DeleteForm from './deleteForm';
 
 export default function Body() {
     const apiUrl = 'http://127.0.0.1:8000/api/todos/';
     const [todos, setTodos] = useState([]);
     const [isForm, setIsForm] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
 
     // Fetch data from API
     const fetchData = async () => {
@@ -14,6 +16,22 @@ export default function Body() {
         console.log(data);
         setTodos(data);
     };
+
+    // delete api call
+    const deleteTodo = async () => {
+        let id = deleteId;
+        const response = await fetch(`${apiUrl}${id}/`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        if (response.ok) {
+            const updatedTodos = todos.filter((todo) => todo.id !== id);
+            setTodos(updatedTodos);
+            setDeleteId(null);
+        }
+    }
 
     useEffect(() => {
         fetchData();
@@ -28,12 +46,13 @@ export default function Body() {
 
             <div className="my-4 flex justify-center flex-wrap gap-5">
                 {todos.length !== 0 ? (
-                    todos.map((todo) => <Card key={todo.id} todo={todo} />)
+                    todos.map((todo) => <Card key={todo.id} todo={todo} setDeleteId={setDeleteId} />)
                 ) : (
                     <p>No tasks available</p>
                 )}
             </div>
             {isForm && <CreateForm setIsForm={setIsForm} setTodos={setTodos} />}
+            {deleteId && <DeleteForm setDeleteId={setDeleteId} setTodos={setTodos} deleteTodo={deleteTodo} />}
         </div>
     );
 }
