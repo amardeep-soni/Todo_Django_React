@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Card from './Card';
+import CreateForm from './CreateForm';
 
 export default function Body() {
     const apiUrl = 'http://127.0.0.1:8000/api/todos/';
     const [todos, setTodos] = useState([]);
+    const [isForm, setIsForm] = useState(false);
 
     // Fetch data from API
     const fetchData = async () => {
@@ -21,7 +23,7 @@ export default function Body() {
         <div>
             <div className='p-4 flex justify-between items-center'>
                 <p className='text-3xl font-bold'>Todo</p>
-                <i className='fa-solid fa-circle-plus text-blue-500 text-3xl mr-2 cursor-pointer'></i>
+                <i className='fa-solid fa-circle-plus text-blue-500 text-3xl mr-2 cursor-pointer' onClick={() => { setIsForm(true) }}></i>
             </div>
 
             <div className="my-4 flex justify-center flex-wrap gap-5">
@@ -31,6 +33,7 @@ export default function Body() {
                     <p>No tasks available</p>
                 )}
             </div>
+            {isForm && <CreateForm setIsForm={setIsForm} setTodos={setTodos} />}
         </div>
     );
 }
