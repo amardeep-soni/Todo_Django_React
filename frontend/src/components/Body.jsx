@@ -32,6 +32,25 @@ export default function Body() {
             setDeleteId(null);
         }
     }
+    // Set completed status to true
+    const completeTodo = async (id) => {
+        const todoToUpdate = todos.find((todo) => todo.id === id);
+        if (!todoToUpdate) return; // Exit if no matching todo is found
+
+        const updatedTodo = { ...todoToUpdate, completed: true };
+
+        
+        await fetch(`${apiUrl}${id}/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedTodo),
+        });
+        setTodos(todos.map((todo) => (todo.id === id ? updatedTodo : todo)));
+        setCompletedId(null);
+    };
+
 
     useEffect(() => {
         fetchData();
@@ -46,7 +65,7 @@ export default function Body() {
 
             <div className="my-4 flex justify-center flex-wrap gap-5">
                 {todos.length !== 0 ? (
-                    todos.map((todo) => <Card key={todo.id} todo={todo} setDeleteId={setDeleteId} setIsForm={setIsForm} />)
+                    todos.map((todo) => <Card key={todo.id} todo={todo} setDeleteId={setDeleteId} setIsForm={setIsForm} completeTodo={completeTodo} />)
                 ) : (
                     <p>No tasks available</p>
                 )}

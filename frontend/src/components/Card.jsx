@@ -10,7 +10,7 @@ export default function Card(props) {
                     {completed ? (
                         <button className='bg-green-500 text-slate-50 px-3 py-2 rounded-lg text-sm'>Completed</button>
                     ) : (
-                        <button className='bg-slate-300 px-3 py-2 rounded-lg text-sm'>Pending</button>
+                        <button onClick={()=> props.completeTodo(id)} className='bg-slate-300 px-3 py-2 rounded-lg text-sm'>Mark as Completed</button>
                     )}
                 </div>
                 <div>
